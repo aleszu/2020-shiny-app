@@ -23,8 +23,9 @@ Shiny apps are not easy to build. So here's a breakdown of how each of the above
 
 ### Google Trends search query
 
-The following R code queries Google Trends for "interest by region" data for "Elizabeth Warren" searches between March 30 and April 30, 2019.     
+The following R code queries Google Trends for "interest by region" data for "Elizabeth Warren" searches between March 30 and April 30, 2019. Next, it pulls in a U.S. national map and stores it in statesMap. Then, it merges the Google Trends search data with the map and plots it all using ggplot. This code is thanks to Peer Christensen's [Storybench post](http://www.storybench.org/mapping-search-data-from-google-trends-in-r/).
  
+``` 
   user1 <- gtrendsR::gtrends(c("Elizabeth Warren"), time = "2019-03-30 2019-04-30", gprop = "web", geo = c("US"))
 
   InterestByRegion <- dplyr::as_tibble(user1$interest_by_region)
@@ -45,10 +46,38 @@ The following R code queries Google Trends for "interest by region" data for "El
     ggplot2::coord_fixed(1.3) +
     scale_fill_gradient(legend_title, low = "white", high = "black")
   pmap1
+```
+
+I usually try this code in a separate R file to make sure it works. 
+
 
 ### Media Cloud search query
 
 
+
+```
+    mc.key <- "XXXXXXXXXX"
+
+    mc.q1 <- "https://api.mediacloud.org/api/v2/stories_public/count?q="
+    mc.q2 <- "&split=1&split_period=day&fq=publish_date:%5B2019-03-25T00:00:00.000Z+TO+2019-04-25T00:00:00.000Z%5D&key="
+
+    query1 <- URLencode(paste(c(datasetInput2()), collapse = "%20"))
+
+    mc.query1 <- jsonlite::fromJSON(paste0(mc.q1, query1, mc.q2, mc.key))$counts
+
+    mc.query1$date <- as.Date(mc.query1$date)
+    mc.query1 <- mc.query1 %>% filter(date > "2019-03-25" & date < "2019-04-25")
+
+    pmedia1 <- ggplot(mc.query1, aes(date, count)) +
+      theme_minimal() +
+      ylab("Sentences per day") +
+      xlab("") +
+        ylim(0,10000) +
+      theme_ipsum() +
+      scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b")) +
+      geom_line(stat="identity")  
+    pmedia1
+```
 
 ### Twitter 'get_timelines' query
 
