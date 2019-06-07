@@ -24,22 +24,18 @@ Shiny apps are not easy to build. So here's a breakdown of how each of the above
 ### Google Trends search query
 
 The following R code queries Google Trends for "interest by region" data for "Elizabeth Warren" searches between March 30 and April 30, 2019.     
-
-  # step 1 
+ 
   user1 <- gtrendsR::gtrends(c("Elizabeth Warren"), time = "2019-03-30 2019-04-30", gprop = "web", geo = c("US"))
 
-  # step 2
   InterestByRegion <- dplyr::as_tibble(user1$interest_by_region)
   InterestByRegion <- InterestByRegion %>% 
     dplyr::mutate(region = stringr::str_to_lower(location))
 
   statesMap <- ggplot2::map_data("state")
 
-  # step 3
   Merged <- merge(statesMap, InterestByRegion, by = "region")
   Merged <- InterestByRegion %>% dplyr::left_join(x = ., y = statesMap, by = "region")
 
-  # step 4
   legend_title <- "search volume"
   
   pmap1 <- ggplot2::ggplot(Merged, aes(x = long, y = lat)) +
