@@ -1,6 +1,8 @@
 # How to build a Shiny app that visualizes media coverage, tweets and Google search interest
 
-The following documentation explains the process of creating a Shiny app in RStudio. Inspired by ProPublica and Google's Election DataBot, an interactive exploration of the 2016 midterms, this Shiny app acts as a dynamic interface to explore 2020 Democratic candidate tweets, Google search interest and mainstream media attention. 
+The following documentation explains the process of creating a Shiny app in RStudio. 
+
+Inspired by ProPublica and Google's Election DataBot, an interactive exploration of the 2016 midterms, [this Shiny app](storybench.shinyapps.io/twitter) acts as a dynamic interface to explore 2020 Democratic candidate tweets, Google search interest and mainstream media attention. 
 
 ## Required R packages and API credentials
 
