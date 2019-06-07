@@ -4,6 +4,11 @@ The following documentation explains the process of creating a Shiny app in RStu
 
 Inspired by ProPublica and Google's Election DataBot, an interactive exploration of the 2016 midterms, [this Shiny app](storybench.shinyapps.io/twitter) acts as a dynamic interface to explore 2020 Democratic candidate tweets, Google search interest and mainstream media attention. 
 
+![img](https://raw.githubusercontent.com/aleszu/2020-shiny-app/master/img/shiny1.png)
+![img](https://raw.githubusercontent.com/aleszu/2020-shiny-app/master/img/shiny2.png)
+![img](https://raw.githubusercontent.com/aleszu/2020-shiny-app/master/img/shiny3.png)
+![img](https://raw.githubusercontent.com/aleszu/2020-shiny-app/master/img/shiny4.png)
+
 ## Required R packages and API credentials
 
 This Shiny app uses rtweet to access Twitter's REST API, gtrendsR to access Google Trends, and jsonlite to access the Media Cloud API's top online media sources, including The New York Times, Vox, Guardian, Slate, The Washington Post, Breitbart, Fox News, CNN and more. For Twitter and Media Cloud, you must request your own API keys. 
@@ -149,7 +154,41 @@ Finally, I built a word cloud using the [wordcloud package](http://www.sthda.com
 
 ## Preparing Shiny's user interface
 
+Below is an excerpt of the user interface code that creates the dropdown menus. The reason everything is duplicated is that I want to create two columns with every function so that users can compare between 2020 candidates. For a barebones example of a Shiny app that will make all this more clear, check out [this example](https://shiny.rstudio.com/gallery/telephones-by-region.html). 
 
+```
+fluidRow(
+    column(6, 
+           selectInput("user", "Candidate:", 
+                       choices = c("BernieSanders", "KamalaHarris", "EWarren", "BetoORourke", "JoeBiden", "PeteButtigieg", "AmyKlobuchar", "SenGillibrand", "CoryBooker", "JulianCastro", "SethMoulton", "TulsiGabbard"),
+                       selected = "KamalaHarris"),
+         submitButton("Submit"),
+          h5("Google searches of candidate in last month", align = "center"),
+          plotOutput("map1"),
+          h5("Media attention of candidate in last month", align = "center"),
+          plotOutput("media1"),
+          h5("Sentiment of candidate’s last 500 tweets", align = "center"),
+          plotlyOutput("p3", height=500),
+          h5("Most frequent terms on Twitter in last month", align = "center"),
+          plotOutput("freqterms1") 
+    ),
+     
+    column(6, 
+           selectInput("user2", "Candidate:", 
+                       choices = c("BernieSanders", "KamalaHarris", "BetoORourke", "EWarren", "JoeBiden", "PeteButtigieg", "AmyKlobuchar", "SenGillibrand", "CoryBooker", "JulianCastro", "SethMoulton", "TulsiGabbard"),
+                       selected = "BetoORourke"),
+           submitButton("Submit"),
+           h5("Google searches of candidate in last month", align = "center"),
+           plotOutput("map2"),
+           h5("Media attention of candidate in last month", align = "center"),
+           plotOutput("media2"),
+           h5("Sentiment of candidate’s last 500 tweets", align = "center"),
+           plotlyOutput("p6", height=500),
+           h5("Most frequent terms on Twitter in last month", align = "center"),
+           plotOutput("freqterms2")
+           )
+     )
+```
 
 ## Preparing Shiny's server-side code 
 
