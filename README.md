@@ -4,6 +4,8 @@ The following documentation explains the process of creating a Shiny app in RStu
 
 Inspired by ProPublica and Google's Election DataBot, an interactive exploration of the 2016 midterms, [this Shiny app](storybench.shinyapps.io/twitter) acts as a dynamic interface to explore 2020 Democratic candidate tweets, Google search interest and mainstream media attention. 
 
+Feedback? DM me at [@aleszubajak](http://twitter.com/@aleszubajak).
+
 ![img](https://raw.githubusercontent.com/aleszu/2020-shiny-app/master/img/shiny1.png)
 ![img](https://raw.githubusercontent.com/aleszu/2020-shiny-app/master/img/shiny2.png)
 ![img](https://raw.githubusercontent.com/aleszu/2020-shiny-app/master/img/shiny3.png)
