@@ -53,33 +53,34 @@ I usually try this code in a separate R file to make sure it works.
 
 ### Media Cloud search query
 
-
+The following code queries the [Media Cloud API](https://github.com/berkmancenter/mediacloud/blob/master/doc/api_2_0_spec/api_2_0_spec.md) for the count of stories mentioning "Elizabeth Warren" published across its U.S. mainstream media outlets collection between March 25 and April 25. It strings together a query using R's paste0() function and then fixes the date before plotting it as a line chart in ggplot. Thanks to [Cornelius Puschmann](http://cbpuschmann.net/) and [Martin Frigaard](http://www.storybench.org/how-to-access-apis-in-r/) for helping me with this code.
 
 ```
-    mc.key <- "XXXXXXXXXX"
+  mc.key <- "XXXXXXXXXX"
 
-    mc.q1 <- "https://api.mediacloud.org/api/v2/stories_public/count?q="
-    mc.q2 <- "&split=1&split_period=day&fq=publish_date:%5B2019-03-25T00:00:00.000Z+TO+2019-04-25T00:00:00.000Z%5D&key="
+  mc.q1 <- "https://api.mediacloud.org/api/v2/stories_public/count?q="
+  mc.q2 <- "&split=1&split_period=day&fq=publish_date:%5B2019-03-25T00:00:00.000Z+TO+2019-04-25T00:00:00.000Z%5D&key="
 
-    query1 <- URLencode(paste(c(datasetInput2()), collapse = "%20"))
+  query1 <- URLencode(paste(c("Elizabeth Warren"), collapse = "%20"))
 
-    mc.query1 <- jsonlite::fromJSON(paste0(mc.q1, query1, mc.q2, mc.key))$counts
+  mc.query1 <- jsonlite::fromJSON(paste0(mc.q1, query1, mc.q2, mc.key))$counts
 
-    mc.query1$date <- as.Date(mc.query1$date)
-    mc.query1 <- mc.query1 %>% filter(date > "2019-03-25" & date < "2019-04-25")
+  mc.query1$date <- as.Date(mc.query1$date)
+  mc.query1 <- mc.query1 %>% filter(date > "2019-03-25" & date < "2019-04-25")
 
-    pmedia1 <- ggplot(mc.query1, aes(date, count)) +
-      theme_minimal() +
-      ylab("Sentences per day") +
-      xlab("") +
-        ylim(0,10000) +
-      theme_ipsum() +
-      scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b")) +
-      geom_line(stat="identity")  
-    pmedia1
+  pmedia1 <- ggplot(mc.query1, aes(date, count)) +
+    geom_line(stat="identity") +
+    theme_minimal() +
+    ylab("Sentences per day") +
+    xlab("") +
+    ylim(0,10000) +
+    scale_x_date(breaks = date_breaks("1 week"), labels = date_format("%d %b")) 
+  pmedia1
+    
 ```
 
 ### Twitter 'get_timelines' query
+
 
 
 ### Word Cloud of tokenized tweets
