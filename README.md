@@ -1,6 +1,6 @@
 # How to build a Shiny app that visualizes media coverage, tweets and Google search interest
 
-The following documentation explains the process of creating a Shiny app in RStudio. Inspired by Election DataBot, ProPublica and Google’s interactive exploration of voters and candidates in the 2016 midterms, this Shiny app acts as a dynamic interface to explore 2020 Democratic candidate tweets, Google search interest and mainstream media attention. 
+The following documentation explains the process of creating a Shiny app in RStudio. Inspired by ProPublica and Google's Election DataBot, an interactive exploration of the 2016 midterms, this Shiny app acts as a dynamic interface to explore 2020 Democratic candidate tweets, Google search interest and mainstream media attention. 
 
 ## Required R packages and API credentials
 
@@ -23,7 +23,32 @@ Shiny apps are not easy to build. So here's a breakdown of how each of the above
 
 ### Google Trends search query
 
+The following R code queries Google Trends for "interest by region" data for "Elizabeth Warren" searches between March 30 and April 30, 2019.     
 
+  # step 1 
+  user1 <- gtrendsR::gtrends(c("Elizabeth Warren"), time = "2019-03-30 2019-04-30", gprop = "web", geo = c("US"))
+
+  # step 2
+  InterestByRegion <- dplyr::as_tibble(user1$interest_by_region)
+  InterestByRegion <- InterestByRegion %>% 
+    dplyr::mutate(region = stringr::str_to_lower(location))
+
+  statesMap <- ggplot2::map_data("state")
+
+  # step 3
+  Merged <- merge(statesMap, InterestByRegion, by = "region")
+  Merged <- InterestByRegion %>% dplyr::left_join(x = ., y = statesMap, by = "region")
+
+  # step 4
+  legend_title <- "search volume"
+  
+  pmap1 <- ggplot2::ggplot(Merged, aes(x = long, y = lat)) +
+    theme_void() +
+    geom_polygon(aes(group = group, 
+                     fill = log(hits))) +
+    ggplot2::coord_fixed(1.3) +
+    scale_fill_gradient(legend_title, low = "white", high = "black")
+  pmap1
 
 ### Media Cloud search query
 
